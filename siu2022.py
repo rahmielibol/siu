@@ -192,7 +192,7 @@ taupost = taupre
 w_base=80
 gmax = 150
 dApre = .01
-dApost = -dApre * taupre / taupost * 1.05
+dApost = -dApre * 1.05
 dApost *= gmax
 dApre *= gmax
 
@@ -214,7 +214,7 @@ S21_111_123.connect(True)
  
 S21_111_123.w = 'rand() * 20 + w_base'
 
-print("Number of synapses from P: "+str(S21_111_123.N)+" ortalama:"+str(S21_111_123.N/2))
+print("Number of synapses from P: "+str(S21_111_123.N)+" average:"+str(S21_111_123.N/number_of_neurons_in_S1))
 
 
 S24_131_123 = Synapses(D, S1,  'w :siemens', delay=dly, on_pre='g_DA += w')
@@ -222,7 +222,7 @@ S24_131_123.connect(True)
 S24_131_123.w=w_vse
 
 
-print("Number of synapses from D : "+str(S24_131_123.N)+" ortalama:"+str(S24_131_123.N/2))
+print("Number of synapses from D : "+str(S24_131_123.N)+" average:"+str(S24_131_123.N/number_of_neurons_in_S1))
 print("----------------------------------------------")
 
 
@@ -243,14 +243,14 @@ S29_111_124.connect(True)
  
 S29_111_124.w = 'rand() * 20 + w_base'
 
-print("Number of synapses from P : "+str(S29_111_124.N)+" ortalama:"+str(S29_111_124.N/2))
+print("Number of synapses from P : "+str(S29_111_124.N)+" average:"+str(S29_111_124.N/number_of_neurons_in_S1))
 
 
 S32_131_124 = Synapses(D, S2,  'w :siemens', delay=dly, on_pre='g_DA += w')
 S32_131_124.connect(True)
 S32_131_124.w=w_vsi
 
-print("Number of synapses from D : "+str(S32_131_124.N)+" ortalama:"+str(S32_131_124.N/2))
+print("Number of synapses from D : "+str(S32_131_124.N)+" average:"+str(S32_131_124.N/number_of_neurons_in_S1))
 
 
 S54_1011_131 = Synapses(PG_P_D_1011, D,  'w :siemens', delay=dly, on_pre='ge += w')
@@ -272,7 +272,7 @@ init_time=time.time()
 
 duration1=100*ms
 
-##Ventral Poisson
+
 S01_1011_111.w=we*0
 S54_1011_131.w=we*0
 
@@ -283,7 +283,8 @@ print("sim_time="+str(duration1))
 run(duration1, report='text')
 
 
-##Ventral Poisson
+
+
 S01_1011_111.w=we    ############# ACA Cortex
 S54_1011_131.w=we     ############# VTA DA
 
@@ -305,7 +306,7 @@ S54_1011_131.w=we     ############# VTA DA
 ###############################################################################
 print('Monitors')
 
-############ Ventral ####################
+
 
 
 trace_P = StateMonitor(P, 'v', record=0)
@@ -366,7 +367,7 @@ elif number_of_scenario==2:
     S01_1011_111.w=we    ############# ACA Cortex
     S54_1011_131.w=we*0.3     ############# VTA DA
     
-    duration=1000*ms
+    duration=100*ms
     
     run(duration,report='text')
         
@@ -382,8 +383,7 @@ elif number_of_scenario==2:
     S01_1011_111.w=we*0.3    ############# ACA Cortex
     S54_1011_131.w=we     ############# VTA DA
     
-    duration=1000*ms
-    
+
     run(duration,report='text')
 
         
@@ -400,7 +400,6 @@ elif number_of_scenario==2:
     S01_1011_111.w=we    ############# ACA Cortex
     S54_1011_131.w=we     ############# VTA DA
     
-    duration=1000*ms
     
     run(duration,report='text')
 
@@ -446,109 +445,109 @@ print("----------------------------------------------")
 #########################################
 print("------------- weights  ------")
 
-artis_azalis_dizisi_S1=[]
+dec_inc_S1=[]
 max_temp=0
 min_temp=0
 
 for i in range(len(mon_S21_111_123.w)):
-    dizi_temp=[]
+    array_temp=[]
     max_temp=0
     min_temp=0
-    dizi_temp=mon_S21_111_123.w[i]
-    max_temp=max(dizi_temp)
-    min_temp=min(dizi_temp)
-    max_index_k=where(dizi_temp==max_temp)
+    array_temp=mon_S21_111_123.w[i]
+    max_temp=max(array_temp)
+    min_temp=min(array_temp)
+    max_index_k=where(array_temp==max_temp)
     max_index=max_index_k[0][0]   
-    min_index_k=where(dizi_temp==min_temp)
+    min_index_k=where(array_temp==min_temp)
     min_index=min_index_k[0][0]
     if max_index<min_index:
-        artis_azalis_dizisi_S1.append(min_temp-max_temp)
+        dec_inc_S1.append(min_temp-max_temp)
     elif max_index>min_index:
-        artis_azalis_dizisi_S1.append(max_temp-min_temp)
+        dec_inc_S1.append(max_temp-min_temp)
     else:
-        artis_azalis_dizisi_S1.append(max_temp-min_temp)
+        dec_inc_S1.append(max_temp-min_temp)
 
 
-enbuyukartma_indeksi_S1=artis_azalis_dizisi_S1.index(max(artis_azalis_dizisi_S1))
-enbuyukazalma_indeksi_S1=artis_azalis_dizisi_S1.index(min(artis_azalis_dizisi_S1))
+max_index_S1=dec_inc_S1.index(max(dec_inc_S1))
+min_index_S1=dec_inc_S1.index(min(dec_inc_S1))
 
 
-artis_azalis_dizisi_S2=[]
+dec_inc_S2=[]
 max_temp=0
 min_temp=0
 
 for i in range(len(mon_S29_111_124.w)):
-    dizi_temp=[]
+    array_temp=[]
     max_temp=0
     min_temp=0
-    dizi_temp=mon_S29_111_124.w[i]
-    max_temp=max(dizi_temp)
-    min_temp=min(dizi_temp)
-    max_index_k=where(dizi_temp==max_temp)
+    array_temp=mon_S29_111_124.w[i]
+    max_temp=max(array_temp)
+    min_temp=min(array_temp)
+    max_index_k=where(array_temp==max_temp)
     max_index=max_index_k[0][0]   
-    min_index_k=where(dizi_temp==min_temp)
+    min_index_k=where(array_temp==min_temp)
     min_index=min_index_k[0][0]
     if max_index<min_index:
-        artis_azalis_dizisi_S2.append(min_temp-max_temp)
+        dec_inc_S2.append(min_temp-max_temp)
     elif max_index>min_index:
-        artis_azalis_dizisi_S2.append(max_temp-min_temp)
+        dec_inc_S2.append(max_temp-min_temp)
     else:
-        artis_azalis_dizisi_S2.append(max_temp-min_temp)
+        dec_inc_S2.append(max_temp-min_temp)
 
 
-enbuyukartma_indeksi_S2=artis_azalis_dizisi_S2.index(max(artis_azalis_dizisi_S2))
-enbuyukazalma_indeksi_S2=artis_azalis_dizisi_S2.index(min(artis_azalis_dizisi_S2))
+max_index_S2=dec_inc_S2.index(max(dec_inc_S2))
+min_index_S2=dec_inc_S2.index(min(dec_inc_S2))
 
 
 
 figure()
 subplot(211)
-plot(mon_S21_111_123.t/ms,mon_S21_111_123.w[enbuyukartma_indeksi_S1],'k')
-plot(mon_S21_111_123.t/ms,mon_S21_111_123.w[enbuyukazalma_indeksi_S1],'k')
-plot(mon_S29_111_124.t/ms,mon_S29_111_124.w[enbuyukartma_indeksi_S2],'r')
-plot(mon_S29_111_124.t/ms,mon_S29_111_124.w[enbuyukazalma_indeksi_S2],'r')
+plot(mon_S21_111_123.t/ms,mon_S21_111_123.w[max_index_S1],'k')
+plot(mon_S21_111_123.t/ms,mon_S21_111_123.w[min_index_S1],'k')
+plot(mon_S29_111_124.t/ms,mon_S29_111_124.w[max_index_S2],'r')
+plot(mon_S29_111_124.t/ms,mon_S29_111_124.w[min_index_S2],'r')
 
 
-agirlik_toplamlari_degisimi_S1=[]
-agirlik_toplamlari_degisimi_S2=[]
+weights_change_S1=[]
+weights_change_S2=[]
 
 if number_of_scenario==2:
-    toplam_adim=60
-    adim_zamani=len(mon_S21_111_123.t)/toplam_adim
+    total_step=60
+    step_time=len(mon_S21_111_123.t)/total_step
 else:
-    toplam_adim=len(mon_S21_111_123.t)
-    adim_zamani=len(mon_S21_111_123.t)/len(mon_S21_111_123.t)
+    total_step=len(mon_S21_111_123.t)
+    step_time=len(mon_S21_111_123.t)/len(mon_S21_111_123.t)
 
 
-print("agirlik analizi icin toplam adim : "+str(toplam_adim))
-print("agirlik analizi icin adim zamani : "+str(adim_zamani))
+print("total_steps_synaptic_weights : "+str(total_step))
+print("step_time_synaptic_weights : "+str(step_time))
 
-for t in range(toplam_adim):
-    print(int(t*adim_zamani))
-    print(t*adim_zamani)
-    print(100*adim_zamani*t/len(mon_S21_111_123.t))
-    t_ani_icin_gecici_toplam_S1=0
-    t_ani_icin_gecici_toplam_S2=0
+for t in range(total_step):
+    print(int(t*step_time))
+    print(t*step_time)
+    print(100*step_time*t/len(mon_S21_111_123.t))
+    total_temp_4_t_S1=0
+    total_temp_4_t_S2=0
     for i in range(len(mon_S21_111_123.w)):
-        t_ani_icin_gecici_toplam_S1=t_ani_icin_gecici_toplam_S1+mon_S21_111_123.w[i][int(t*adim_zamani)]
-        t_ani_icin_gecici_toplam_S2=t_ani_icin_gecici_toplam_S2+mon_S29_111_124.w[i][int(t*adim_zamani)]
-    agirlik_toplamlari_degisimi_S1.append(t_ani_icin_gecici_toplam_S1)
-    agirlik_toplamlari_degisimi_S2.append(t_ani_icin_gecici_toplam_S2)
+        total_temp_4_t_S1=total_temp_4_t_S1+mon_S21_111_123.w[i][int(t*step_time)]
+        total_temp_4_t_S2=total_temp_4_t_S2+mon_S29_111_124.w[i][int(t*step_time)]
+    weights_change_S1.append(total_temp_4_t_S1)
+    weights_change_S2.append(total_temp_4_t_S2)
 
 
-alan_S1=agirlik_toplamlari_degisimi_S1[-1]/agirlik_toplamlari_degisimi_S1[0]
-print("alan s1 ="+str(alan_S1))
-alan_S2=agirlik_toplamlari_degisimi_S2[-1]/agirlik_toplamlari_degisimi_S2[0]
-print("alan s2 ="+str(alan_S2))
+a_S1=weights_change_S1[-1]/weights_change_S1[0]
+print("area s1 ="+str(a_S1))
+a_S2=weights_change_S2[-1]/weights_change_S2[0]
+print("area s2 ="+str(a_S2))
 
-yukseklik_S1=((agirlik_toplamlari_degisimi_S1[-1]/S21_111_123.N)-(agirlik_toplamlari_degisimi_S1[0]/S21_111_123.N))
-print("yukseklik s1 ="+str(yukseklik_S1))
-yukseklik_S2=((agirlik_toplamlari_degisimi_S2[-1]/S29_111_124.N)-(agirlik_toplamlari_degisimi_S2[0]/S29_111_124.N))
-print("yukseklik s2 ="+str(yukseklik_S2))
+y_S1=((weights_change_S1[-1]/S21_111_123.N)-(weights_change_S1[0]/S21_111_123.N))
+print("y s1 ="+str(y_S1))
+y_S2=((weights_change_S2[-1]/S29_111_124.N)-(weights_change_S2[0]/S29_111_124.N))
+print("y s2 ="+str(y_S2))
 
 
-y5=agirlik_toplamlari_degisimi_S1
-y6=agirlik_toplamlari_degisimi_S2
+y5=weights_change_S1
+y6=weights_change_S2
 
 
 print("wS1 total increase in delta t1 : "+ str(100*(y5[20]-y5[0])/y5[0]))
@@ -563,8 +562,8 @@ print("wS2 total increase : "+ str(100*(y6[-1]-y6[0])/y6[0]))
 
 
 subplot(212)
-plot(agirlik_toplamlari_degisimi_S1)
-plot(agirlik_toplamlari_degisimi_S2)
+plot(weights_change_S1)
+plot(weights_change_S2)
 
 
 
@@ -598,5 +597,5 @@ ylabel('S2')
 show()
 
 print("----------------------------------------------")
-print(" - - -     finish     - - - ")
+print(" - - -     The End     - - - ")
 print("----------------------------------------------")
