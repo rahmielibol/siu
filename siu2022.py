@@ -367,7 +367,7 @@ elif number_of_scenario==2:
     S01_1011_111.w=we    ############# ACA Cortex
     S54_1011_131.w=we*0.3     ############# VTA DA
     
-    duration=100*ms
+    duration=1000*ms
     
     run(duration,report='text')
         
