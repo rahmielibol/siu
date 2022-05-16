@@ -524,7 +524,6 @@ print("step_time_synaptic_weights : "+str(step_time))
 
 for t in range(total_step):
     print(int(t*step_time))
-    print(t*step_time)
     print(100*step_time*t/len(mon_S21_111_123.t))
     total_temp_4_t_S1=0
     total_temp_4_t_S2=0
